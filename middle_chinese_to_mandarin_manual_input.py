@@ -910,6 +910,7 @@ def main():
 
     result = simplify_results.get(result, result)
     result = result + tone_result
+    result = result.replace("v", "")
 
     middle_chinese_initial = middle_chinese_initials.get(initial)
     middle_chinese_final = middle_chinese_finals.get(final)
