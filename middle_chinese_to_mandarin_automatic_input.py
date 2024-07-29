@@ -864,6 +864,8 @@ character_dictionary = {
     "上": [25, 105, 3],
     "大": [7, 94, 3],
     "为": [35, 14, 3],
+    "和": [33, 95, 1],
+    "国": [28, 132, 4],
 }
 
 # Main Script; Creates output
