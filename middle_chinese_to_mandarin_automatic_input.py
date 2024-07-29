@@ -843,12 +843,37 @@ simplify_results = {
     "qüan": "quan",
     "xüan": "xuan",
 }
+
+# Character Dictionary
+character_dictionary = {
+    "的": [5, 127, 4],
+    "一": [34, 48, 4],
+    "是": [25, 11, 2],
+    "不": [1, 136, 1],
+    "了": [37, 93, 2],
+    "在": [15, 41, 2],
+    "人": [38, 43, 1],
+    "有": [35, 136, 2],
+    "我": [31, 94, 2],
+    "他": [6, 94, 1],
+    "这": [23, 100, 2],
+    "个": [28, 94, 3],
+    "们": [4, 55, 1],
+    "中": [9, 2, 1],
+    "来": [37, 41, 1],
+    "上": [25, 105, 3],
+    "大": [7, 94, 3],
+    "为": [35, 14, 3],
+}
+
 # Main Script; Creates output
 def main():
-    # Matches the Initials Finals and Tone to get a first result
-    initial = int(input("Input Initial "))
-    final = int(input("Input Final "))
-    tone = int(input("Input Tone "))
+    # Retrieves a value from the character dictionary
+    character = input("Input Character ")
+    character_values = character_dictionary.get(character)
+    initial = character_values[0]
+    final = character_values[1]
+    tone = character_values[2]
     initial_result = match_initials.get(initial)
     final_result = match_finals.get(final)
     tone_result = match_tones.get(tone)
