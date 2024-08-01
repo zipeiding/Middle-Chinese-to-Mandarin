@@ -773,6 +773,10 @@ palatal_retroflex_depalatalization = {
 }
 
 retroflex_special_finals = {
+    12: "uai",
+    14: "uai",
+    16: "uai",
+    18: "uai",
     52: "uai",
     99: "a",
     105: "uang",
