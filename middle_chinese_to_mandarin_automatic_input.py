@@ -1,3 +1,10 @@
+import json
+
+filename = "middle_chinese_to_mandarin/character_dictionary.json"
+
+with open(filename, "r", encoding="utf-8") as file:
+    character_dictionary = json.load(file)
+
 # Matches MC Initials to Mandarin Equivalent
 match_initials = {
     1: "b",
@@ -783,6 +790,17 @@ retroflex_special_finals = {
     134: "e",
 }
 
+retroflex_dental_true = {
+    119: True,
+    134: True, 
+}
+
+retroflex_dental_initial = {
+    "zh": "z",
+    "ch": "c",
+    "sh": "s",
+}
+
 palatal_nasal_special_finals = {
     11: "er",
     13: "er",
@@ -848,141 +866,105 @@ simplify_results = {
     "xüan": "xuan",
 }
 
-# Character Dictionary
-character_dictionary = {
-    "的": [5, 127, 4],
-    "一": [34, 48, 4],
-    "是": [25, 11, 2],
-    "不": [1, 136, 1],
-    "了": [37, 93, 2],
-    "在": [15, 41, 2],
-    "人": [38, 43, 1],
-    "有": [35, 136, 2],
-    "我": [31, 94, 2],
-    "他": [6, 94, 1],
-    "这": [23, 100, 2],
-    "个": [28, 94, 3],
-    "们": [4, 55, 1],
-    "中": [9, 2, 1],
-    "来": [37, 41, 1],
-    "上": [25, 105, 3],
-    "大": [7, 94, 3],
-    "为": [35, 14, 3],
-    "和": [33, 95, 1],
-    "国": [28, 132, 4],
-    "地": [7, 15, 3],
-    "到": [5, 89, 3],
-    "以": [36, 19, 2],
-    "说": [26, 82, 4],
-    "时": [25, 19, 1],
-    "要": [34, 91, 3],
-    "就": [15, 136, 3],
-    "出": [24, 52, 4],
-    "会": [33, 26, 3],
-    "可": [29, 94, 2],
-    "也": [36, 100, 2],
-    "你": [12, 11, 2],
-    "对": [5, 42, 3],
-    "生": [21, 109, 1],
-    "能": [8, 129, 1],
-    "而": [38, 19, 1],
-    "子": [13, 19, 2],
-    "秦": [15, 43, 1],
-    "洋": [36, 105, 1],
-    "衿": [28, 140, 1],
-    "佩": [3, 42, 3],
-    "晓": [32, 93, 2],
-    "王": [35, 106, 1],
-    "颖": [36, 122, 2],
-}
-
 # Main Script; Creates output
 def main():
     # Retrieves a value from the character dictionary
-    character = input("Input Character ")
-    character_values = character_dictionary.get(character)
-    initial = character_values[0]
-    final = character_values[1]
-    tone = character_values[2]
-    initial_result = match_initials.get(initial)
-    final_result = match_finals.get(final)
-    tone_result = match_tones.get(tone)
+    characters = input("Input Characters ")
+    characters = list(characters)
+    middle_chinese_result_list = []
+    result_list = []
 
-    if initial_voiced.get(initial) == True:
-        # Voiced Program
-        if tone == 1:
-            tone_result = "2"
-            initial_result = voiced_initial_devoicing.get(initial_result, initial_result)
-        if tone == 4:
-            if voiced_obstruent_true.get(initial) == True:
+    for i in range(len(characters)):
+        character_values = character_dictionary.get(characters[i])
+        initial = character_values[0]
+        final = character_values[1]
+        tone = character_values[2]
+        initial_result = match_initials.get(initial)
+        final_result = match_finals.get(final)
+        tone_result = match_tones.get(tone)
+
+        if initial_voiced.get(initial) == True:
+            # Voiced Program
+            if tone == 1:
                 tone_result = "2"
-            if voiced_sonorant_true.get(initial) == True:
-                tone_result = "4"
-        if tone == 2:
-            if voiced_obstruent_true.get(initial) == True:
-                tone_result = "4"
+                initial_result = voiced_initial_devoicing.get(initial_result, initial_result)
+            if tone == 4:
+                if voiced_obstruent_true.get(initial) == True:
+                    tone_result = "2"
+                if voiced_sonorant_true.get(initial) == True:
+                    tone_result = "4"
+            if tone == 2:
+                if voiced_obstruent_true.get(initial) == True:
+                    tone_result = "4"
 
-    if labial_true.get(initial) == True:
-        # Labial Program
-        final_result = match_labial_finals.get(final_result, final_result)
-        if initial == 1 or initial == 2 or initial == 3:
-            if labialdentalization_obstruents_true.get(final) == True:
-                initial_result = "f"
-        if initial == 4:
-            if m_lenition_true.get(final) == True:
-                initial_result = "w"
-    elif dental_silibant_true.get(initial) == True:
-        # Dental Silibant Program
-        final_result = dental_silibant_special_finals.get(final, final_result)
-        if dental_silibant_finals_palatalization_true.get(final, False):
-            initial_result = dental_silibant_velar_initial_palatalization.get(initial_result, initial_result)
-    elif velar_true.get(initial) == True:
-        # Velar Program
-        final_result = velar_special_finals.get(final, final_result)
-        if velar_finals_palatalization_true.get(final, False):
-            initial_result = dental_silibant_velar_initial_palatalization.get(initial_result, initial_result)
-    elif retroflex_nonsilibant_true.get(initial) == True:
-        # Retroflex Nonsilibant Program
-        final_result = palatal_retroflex_depalatalization.get(final_result, final_result)
-    elif palatal_true.get(initial) == True:
-        # Palatal Program
-        if initial == 38:
-            final_result = palatal_nasal_special_finals.get(final)
-            initial_result = "v"
-            if final_result == None:
-                final_result = match_finals.get(final)
-                initial_result = match_initials.get(initial)
-        final_result = palatal_retroflex_depalatalization.get(final_result, final_result)
-    elif retroflex_silibant_true.get(initial) == True:
-        # Retroflex Silibant Program
-        final_result = palatal_retroflex_depalatalization.get(final_result, final_result)
-        final_result = retroflex_special_finals.get(final, final_result)
-    
-    final_result = simplify_final.get(final_result, final_result)
+        if labial_true.get(initial) == True:
+            # Labial Program
+            final_result = match_labial_finals.get(final_result, final_result)
+            if initial == 1 or initial == 2 or initial == 3:
+                if labialdentalization_obstruents_true.get(final) == True:
+                    initial_result = "f"
+            if initial == 4:
+                if m_lenition_true.get(final) == True:
+                    initial_result = "w"
+        elif dental_silibant_true.get(initial) == True:
+            # Dental Silibant Program
+            final_result = dental_silibant_special_finals.get(final, final_result)
+            if dental_silibant_finals_palatalization_true.get(final, False):
+                initial_result = dental_silibant_velar_initial_palatalization.get(initial_result, initial_result)
+        elif velar_true.get(initial) == True:
+            # Velar Program
+            final_result = velar_special_finals.get(final, final_result)
+            if velar_finals_palatalization_true.get(final, False):
+                initial_result = dental_silibant_velar_initial_palatalization.get(initial_result, initial_result)
+        elif retroflex_nonsilibant_true.get(initial) == True:
+            # Retroflex Nonsilibant Program
+            final_result = palatal_retroflex_depalatalization.get(final_result, final_result)
+        elif palatal_true.get(initial) == True:
+            # Palatal Program
+            if initial == 38:
+                final_result = palatal_nasal_special_finals.get(final)
+                initial_result = "v"
+                if final_result == None:
+                    final_result = match_finals.get(final)
+                    initial_result = match_initials.get(initial)
+            final_result = palatal_retroflex_depalatalization.get(final_result, final_result)
+        elif retroflex_silibant_true.get(initial) == True:
+            # Retroflex Silibant Program
+            final_result = palatal_retroflex_depalatalization.get(final_result, final_result)
+            final_result = retroflex_special_finals.get(final, final_result)
+            if retroflex_dental_true.get(final, False):
+                initial_result = retroflex_dental_initial.get(initial_result, initial_result)
+        
+        final_result = simplify_final.get(final_result, final_result)
 
-    result = initial_result + final_result
-    result = result.replace("v", "")
+        result = initial_result + final_result
+        result = result.replace("v", "")
 
-    result = simplify_results.get(result, result)
-    result = result + tone_result
-    result = result.replace("v", "")
+        result = simplify_results.get(result, result)
+        result = result + tone_result
+        result = result.replace("v", "")
 
-    middle_chinese_initial = middle_chinese_initials.get(initial)
-    middle_chinese_final = middle_chinese_finals.get(final)
-    middle_chinese_tone = str(tone)
+        middle_chinese_initial = middle_chinese_initials.get(initial)
+        middle_chinese_final = middle_chinese_finals.get(final)
+        middle_chinese_tone = str(tone)
 
-    if middle_chinese_tone == "4":
-        middle_chinese_tone = ""
-    elif middle_chinese_tone == "1":
-        middle_chinese_tone = ""
-    elif middle_chinese_tone == "2":
-        middle_chinese_tone = "X"
-    elif middle_chinese_tone == "3":
-        middle_chinese_tone = "H"
+        if middle_chinese_tone == "4":
+            middle_chinese_tone = ""
+        elif middle_chinese_tone == "1":
+            middle_chinese_tone = ""
+        elif middle_chinese_tone == "2":
+            middle_chinese_tone = "X"
+        elif middle_chinese_tone == "3":
+            middle_chinese_tone = "H"
 
-    middle_chinese_result = middle_chinese_initial + middle_chinese_final + middle_chinese_tone
+        middle_chinese_result = middle_chinese_initial + middle_chinese_final + middle_chinese_tone
 
-    print(middle_chinese_result)
-    print(result)
+        middle_chinese_result_list.append(middle_chinese_result)
+        result_list.append(result)
+
+        middle_chinese_result = ""
+        result = ""
+    print(" ".join(middle_chinese_result_list))
+    print(" ".join(result_list))
 
 main()
