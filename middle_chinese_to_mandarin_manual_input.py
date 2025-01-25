@@ -539,6 +539,7 @@ match_labial_finals = {
     "e": "o",
     "ü": "u",
     "iou": "ou",
+    "ua": "a"
 }
 
 labialdentalization_obstruents_true = {
@@ -783,6 +784,17 @@ retroflex_special_finals = {
     134: "e",
 }
 
+retroflex_dental_true = {
+    119: True,
+    134: True, 
+}
+
+retroflex_dental_initial = {
+    "zh": "z",
+    "ch": "c",
+    "sh": "s",
+}
+
 palatal_nasal_special_finals = {
     11: "er",
     13: "er",
@@ -906,7 +918,9 @@ def main():
         # Retroflex Silibant Program
         final_result = palatal_retroflex_depalatalization.get(final_result, final_result)
         final_result = retroflex_special_finals.get(final, final_result)
-    
+        if retroflex_dental_true.get(final, False):
+            initial_result = retroflex_dental_initial.get(initial_result, initial_result)
+            
     final_result = simplify_final.get(final_result, final_result)
 
     result = initial_result + final_result

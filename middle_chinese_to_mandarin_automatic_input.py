@@ -546,6 +546,7 @@ match_labial_finals = {
     "e": "o",
     "ü": "u",
     "iou": "ou",
+    "ua": "a",
 }
 
 labialdentalization_obstruents_true = {
