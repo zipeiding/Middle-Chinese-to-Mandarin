@@ -1,6 +1,6 @@
 import json
 
-filename = "middle_chinese_to_mandarin/character_dictionary.json"
+filename = "character_dictionary.json"
 
 with open(filename, "r", encoding="utf-8") as file:
     character_dictionary = json.load(file)
